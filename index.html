@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+        <style>
+            body {
+                margin: 0;
+            }
+            .header {
+                padding: 10px;
+                background-color: #3778da;
+            }
+            .title {
+                color: #fff;
+                font-family: 'Open Sans';
+                font-weight: 500;
+                font-stretch: 150%;
+            }
+            #infoBox {
+                display: none;
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                padding: 15px;
+                border-radius: 8px;
+                box-shadow: 0px 0px 10px #0001;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <div class="title">Prodaja karata</div>
+        </div>
+        <div class="footer">
+            <a href="#" id="showInfoBox">Pravne informacije</a>
+        </div>
+        <div id="infoBox">
+            <div class="license"></div>
+            <button id="closeInfoBox">Close</button>
+        </div>
+        <script>
+            fetch('/LICENSE.md')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Failed to load: ${response.statusText}`);
+                }
+                return response.text();
+            })
+            .then(data => {
+                document.querySelector('.license').textContent = data;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.querySelector('.license').textContent = 'Failed to load the license file.';
+            });
+            document.getElementById('showInfoBox').addEventListener('click', function(event) {
+                event.preventDefault();
+                document.getElementById('infoBox').style.display = 'block';
+            });
+    
+            document.getElementById('closeInfoBox').addEventListener('click', function() {
+                document.getElementById('infoBox').style.display = 'none';
+            });
+        </script>
+    </body>
+</html>
