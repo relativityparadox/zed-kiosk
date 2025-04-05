@@ -15,8 +15,10 @@
             .title {
                 color: #fff;
                 font-family: 'Open Sans';
-                font-weight: 500;
-                font-stretch: 150%;
+                font-weight: 700;
+            }
+            .lang-switch {
+                float: right;
             }
             #infoBox {
                 display: none;
@@ -33,7 +35,11 @@
     <body>
         <div class="header">
             <div class="title">Prodaja karata</div>
-        </div>
+            <a href="/zed-kiosk/en/start">
+                <div class="lang-switch">
+
+                </div>
+            </a>
         <div class="footer">
             <a href="#" id="showInfoBox">Pravne informacije</a>
         </div>
@@ -42,7 +48,7 @@
             <button id="closeInfoBox">Close</button>
         </div>
         <script>
-            fetch('/LICENSE.md')
+            fetch('https://relativityparadox.github.io/zed-kiosk/LICENSE.md')
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`Failed to load: ${response.statusText}`);

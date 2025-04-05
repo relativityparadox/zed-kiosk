@@ -1,0 +1,68 @@
+Here's a basic HTML script combined with a small backend to create a text file and send it to a printer via CUPS. The HTML itself will be minimal and rely on a backend script (using Python and Flask) to handle file creation and printing.
+
+### HTML (frontend)
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Print via CUPS</title>
+</head>
+<body>
+    <h1>Create and Print a File</h1>
+    <form action="/print" method="post">
+        <label for="content">Enter Text:</label><br>
+        <textarea id="content" name="content" rows="10" cols="30"></textarea><br><br>
+        <button type="submit">Create and Print</button>
+    </form>
+</body>
+</html>
+```
+
+### Backend (Python with Flask)
+You can set up a simple Flask server on your Raspberry Pi to handle the file creation and printing with CUPS.
+
+1. Install Flask:
+   ```bash
+   pip install flask
+   ```
+
+2. Create the Flask server (`app.py`):
+   ```python
+   from flask import Flask, request
+   import subprocess
+
+   app = Flask(__name__)
+
+   @app.route('/print', methods=['POST'])
+   def print_file():
+       # Get text content from the form
+       content = request.form['content']
+       file_path = "/tmp/output.txt"  # Temporary file path
+
+       # Create the text file
+       with open(file_path, 'w') as file:
+           file.write(content)
+
+       # Print the file using the 'lp' command
+       printer_name = "your_printer_name"  # Replace with your printer name
+       subprocess.run(["lp", "-d", printer_name, file_path])
+
+       return "File sent to printer!"
+
+   if __name__ == '__main__':
+       app.run(host='0.0.0.0', port=5000)
+   ```
+
+### Steps to Run:
+1. Replace `"your_printer_name"` in the Python script with the name of your printer (you can get it from the `lpstat -p` command).
+2. Save the HTML file and Python script on your Raspberry Pi.
+3. Run the Python server:
+   ```bash
+   python3 app.py
+   ```
+4. Open the HTML file in a browser (e.g., `http://<raspberry-pi-ip>:5000`).
+5. Enter text into the textarea and click the button to create the file and send it to your printer.
+
+This setup ensures the text is directly printed without user interaction. Let me know if you face any issues!
